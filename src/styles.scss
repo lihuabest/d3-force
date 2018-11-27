@@ -5,58 +5,70 @@
     box-sizing: border-box;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
+html,
+body {
+    width: 100%;
+    height: 100%;
 }
 
+.link-outline {
+    fill: none;
+    stroke-width: 15px;
+    stroke: transparent;
+}
 .link {
     fill: none;
     stroke: #666;
-    stroke-width: 1.5px;
-    &.licensing {
-      &:hover {
-        stroke: red;
-      }
-    }
-    &:hover {
+    stroke-width: 1px;
+    transition: stroke 0.3s ease;
+    &.highlight {
         stroke: red;
     }
-  }
-  
+}
+
 #licensing {
-  fill: green;
+    fill: green;
 }
 
 .link.licensing {
-  stroke: green;
+    stroke: green;
+    &.highlight {
+        stroke: red;
+    }
 }
 
 .link.resolved {
-  stroke-dasharray: 0,2 1;
+    stroke-dasharray: 0, 2 1;
 }
 
 g.node {
-  &:hover {
-    circle {
-      stroke: red;
+    &:hover {
+        circle {
+            stroke: red;
+        }
     }
-  }
-  &.fixed {
-    circle {
-      stroke: burlywood;
+    // 节点固定
+    &.fixed {
+        circle {
+            stroke: burlywood;
+        }
     }
-  }
+    // 节点高亮
+    &.highlight {
+        circle {
+            stroke: red;
+        }
+    }
 
-  circle {
-    fill: #fff;
-    stroke: #666;
-    stroke-width: 1.5px;
-  }
+    circle {
+        fill: #fff;
+        stroke: #666;
+        stroke-width: 1.5px;
+    }
 
-  text {
-    font: 10px sans-serif;
-    pointer-events: none;
-    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-  }
+    text {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    }
 }
