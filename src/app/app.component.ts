@@ -5,6 +5,7 @@
  * http://jsfiddle.net/dung7n0d/1/
  * http://bl.ocks.org/eesur/be2abfb3155a38be4de4
  * http://bl.ocks.org/d3noob/9662ab6d5ac823c0e444
+ * http://bl.ocks.org/tgk/6068367
  */
 import { Component, OnInit, AfterContentInit } from '@angular/core';
 
@@ -61,6 +62,12 @@ export class AppComponent implements OnInit, AfterContentInit {
             d3.event.preventDefault(); // 阻止默认事件
         }
 
+        let zoom = d3.behavior.zoom()
+            .translate([0, 0])
+            .scale(1)
+            .scaleExtent([0.1, 8]);
+        //     .on('zoom', zoomed);
+
         let force = d3.layout
             .force()
             .nodes(d3.values(this.nodes))
@@ -79,7 +86,17 @@ export class AppComponent implements OnInit, AfterContentInit {
             .select('body')
             .append('svg')
             .attr('width', width)
-            .attr('height', height);
+            .attr('height', height)
+            .call(d3.behavior.zoom()
+                .translate([0, 0])
+                .scale(1)
+                .scaleExtent([0.1, 8])
+                .on('zoom', function() {
+                    svg.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')');
+                })
+            )
+            .append('g');
+
 
         // 画箭头
         svg.append('defs')
@@ -98,6 +115,8 @@ export class AppComponent implements OnInit, AfterContentInit {
             .attr('orient', 'auto')
             .append('path')
             .attr('d', 'M0,-5L10,0L0,5');
+
+        // let g = svg.append('g');
 
         let path = svg
             .append('g')
@@ -197,9 +216,14 @@ export class AppComponent implements OnInit, AfterContentInit {
             force.start();
         }
 
-        let drag = force.drag().on('dragend', dragend);
+        force.drag().on('dragstart', dragstart);
+        force.drag().on('dragend', dragend);
+        function dragstart() {
+            d3.event.sourceEvent.stopPropagation();
+        }
         function dragend(d) {
             d3.select(this).classed('fixed', (d.fixed = true)); // 把点固定
+            d3.event.sourceEvent.stopPropagation();
         }
 
         function linkArc(d) {
@@ -218,6 +242,12 @@ export class AppComponent implements OnInit, AfterContentInit {
         }
 
         addLinks();
+
+        // svg.call(zoom).call(zoom.event);
+
+        // function zoomed() {
+        //     svg.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')');
+        // }
 
         // 给节点新增点击事件
         // 单击
